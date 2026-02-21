@@ -1,0 +1,125 @@
+/* PWA Install Toast */
+.install-toast {
+  position: fixed;
+  bottom: -100px;
+  left: 0;
+  right: 0;
+  background: white;
+  box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.2);
+  padding: 15px 20px;
+  z-index: 9999;
+  transition: bottom 0.3s ease;
+}
+
+.install-toast.show {
+  bottom: 0;
+}
+
+.install-toast-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.install-toast-content span {
+  flex: 1;
+  font-size: 14px;
+  color: #333;
+}
+
+.install-toast-btn {
+  background: #667eea;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.install-toast-btn:hover {
+  background: #5568d3;
+}
+
+.install-toast-close {
+  background: transparent;
+  border: none;
+  color: #999;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 5px 10px;
+}
+
+/* PWA Mode Styles */
+.pwa-mode .header {
+  padding-top: env(safe-area-inset-top);
+}
+
+.pwa-mode .navigation {
+  position: sticky;
+  top: env(safe-area-inset-top);
+}
+
+/* iOS Safe Area */
+@supports (padding: max(0px)) {
+  body {
+    padding-left: max(0px, env(safe-area-inset-left));
+    padding-right: max(0px, env(safe-area-inset-right));
+    padding-bottom: max(0px, env(safe-area-inset-bottom));
+  }
+}
+
+/* Splash Screen Style */
+.splash-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  color: white;
+}
+
+.splash-screen .logo {
+  font-size: 64px;
+  margin-bottom: 20px;
+}
+
+.splash-screen h1 {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.splash-screen p {
+  font-size: 16px;
+  opacity: 0.9;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .install-toast-content {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .install-toast-btn {
+    width: 100%;
+  }
+
+  .install-toast-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+}

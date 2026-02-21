@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tạo Favicon</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #667eea;
+        }
+        canvas {
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            margin: 20px 0;
+            image-rendering: pixelated;
+        }
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn:hover {
+            background: #5568d3;
+        }
+        .preview {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Tạo Favicon 32x32</h1>
+        <p>Favicon nhỏ gọn cho tab trình duyệt</p>
+        
+        <div class="preview">
+            <canvas id="favicon" width="32" height="32"></canvas>
+            <p><strong>Preview (phóng to 4x)</strong></p>
+            <canvas id="faviconLarge" width="128" height="128"></canvas>
+        </div>
+
+        <button class="btn" onclick="downloadFavicon()">📥 Tải Favicon</button>
+
+        <div style="margin-top: 20px; text-align: left; background: #f8f9fa; padding: 15px; border-radius: 8px;">
+            <p><strong>Hướng dẫn:</strong></p>
+            <ol>
+                <li>Click "Tải Favicon"</li>
+                <li>Đổi tên file thành <code>favicon.png</code></li>
+                <li>Copy vào thư mục gốc</li>
+                <li>Thêm vào HTML: <code>&lt;link rel="icon" href="favicon.png"&gt;</code></li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        function drawFavicon(canvas, size) {
+            const ctx = canvas.getContext('2d');
+            
+            // Background
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, '#667eea');
+            gradient.addColorStop(1, '#764ba2');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, size, size);
+            
+            // N5 text
+            ctx.fillStyle = 'white';
+            ctx.font = `bold ${size * 0.5}px Arial, sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('N5', size/2, size/2);
+        }
+
+        // Draw small favicon
+        drawFavicon(document.getElementById('favicon'), 32);
+        
+        // Draw large preview
+        const smallCanvas = document.getElementById('favicon');
+        const largeCanvas = document.getElementById('faviconLarge');
+        const largeCtx = largeCanvas.getContext('2d');
+        largeCtx.imageSmoothingEnabled = false;
+        largeCtx.drawImage(smallCanvas, 0, 0, 32, 32, 0, 0, 128, 128);
+
+        function downloadFavicon() {
+            const canvas = document.getElementById('favicon');
+            const link = document.createElement('a');
+            link.download = 'favicon.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#667eea">
+    
+    <title>Điểm danh - Lớp N5K2</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="attendance.css">
+    <link rel="stylesheet" href="pwa-style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <h1>🇯🇵 Dashboard Quản Lý Lớp N5K2</h1>
+            <p>Hệ thống quản lý học viên Tiếng Nhật</p>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="navigation">
+        <div class="container">
+            <a href="index.html" class="nav-link">
+                <span>👥</span> Học viên
+            </a>
+            <a href="attendance.html" class="nav-link active">
+                <span>✅</span> Điểm danh
+            </a>
+            <a href="grades.html" class="nav-link">
+                <span>📝</span> Bảng điểm
+            </a>
+            <a href="report.html" class="nav-link">
+                <span>📊</span> Chuyên cần
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Thống kê điểm danh -->
+        <section class="stats-section">
+            <div class="stat-card">
+                <div class="stat-icon">📅</div>
+                <div class="stat-info">
+                    <h3>Tổng buổi học</h3>
+                    <p class="stat-number" id="totalSessions">0</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">✅</div>
+                <div class="stat-info">
+                    <h3>Chuyên cần TB</h3>
+                    <p class="stat-number" id="avgAttendance">0%</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chọn ngày điểm danh -->
+        <section class="form-section">
+            <div class="card">
+                <h2>📅 Điểm danh buổi học</h2>
+                
+                <div class="date-selector">
+                    <div class="form-group">
+                        <label for="attendanceDate">Chọn ngày</label>
+                        <input type="date" id="attendanceDate" class="date-input">
+                    </div>
+                    <button class="btn btn-primary" id="loadAttendanceBtn">
+                        Tải điểm danh
+                    </button>
+                </div>
+
+                <!-- Danh sách điểm danh -->
+                <div id="attendanceList" class="attendance-list">
+                    <!-- Sẽ được render bằng JavaScript -->
+                </div>
+
+                <!-- Empty state -->
+                <div id="attendanceEmptyState" class="empty-state show">
+                    <div class="empty-icon">📚</div>
+                    <p>Chọn ngày để bắt đầu điểm danh</p>
+                    <small>Hoặc chưa có học viên nào trong hệ thống</small>
+                </div>
+
+                <!-- Nút lưu -->
+                <div id="saveAttendanceSection" class="save-section" style="display: none;">
+                    <button class="btn btn-primary" id="saveAttendanceBtn">
+                        💾 Lưu điểm danh
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Lịch sử điểm danh -->
+        <section class="table-section">
+            <div class="card">
+                <div class="card-header">
+                    <h2>📊 Lịch sử điểm danh</h2>
+                    <button class="btn btn-secondary btn-small" id="clearHistoryBtn">
+                        🗑️ Xóa lịch sử
+                    </button>
+                </div>
+                
+                <div class="table-container">
+                    <table id="historyTable">
+                        <thead>
+                            <tr>
+                                <th>Ngày</th>
+                                <th>Có mặt</th>
+                                <th>Vắng</th>
+                                <th>Trễ</th>
+                                <th>% Chuyên cần</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody">
+                            <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+                        </tbody>
+                    </table>
+                    
+                    <div id="historyEmptyState" class="empty-state show">
+                        <div class="empty-icon">📋</div>
+                        <p>Chưa có lịch sử điểm danh</p>
+                        <small>Hãy điểm danh buổi học đầu tiên!</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bảng thống kê chi tiết từng học viên -->
+        <section class="table-section">
+            <div class="card">
+                <h2>📈 Thống kê chuyên cần từng học viên</h2>
+                
+                <div class="table-container">
+                    <table id="studentStatsTable">
+                        <thead>
+                            <tr>
+                                <th>Họ tên</th>
+                                <th>Tổng buổi</th>
+                                <th>Có mặt</th>
+                                <th>Vắng</th>
+                                <th>Trễ</th>
+                                <th>% Chuyên cần</th>
+                                <th>Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentStatsBody">
+                            <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+                        </tbody>
+                    </table>
+                    
+                    <div id="statsEmptyState" class="empty-state show">
+                        <div class="empty-icon">📊</div>
+                        <p>Chưa có dữ liệu thống kê</p>
+                        <small>Hãy điểm danh để xem thống kê!</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>© 2024 Lớp Tiếng Nhật N5K2 - Dashboard Quản Lý Học Viên</p>
+        </div>
+    </footer>
+
+    <!-- Modal xác nhận -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <h3>⚠️ Xác nhận</h3>
+            <p id="confirmMessage">Bạn có chắc chắn?</p>
+            <div class="modal-actions">
+                <button class="btn btn-danger" id="confirmBtn">Xác nhận</button>
+                <button class="btn btn-secondary" id="cancelBtn">Hủy</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast notification -->
+    <div id="toast" class="toast"></div>
+
+    <script src="attendance.js"></script>
+    <script src="pwa-init.js"></script>
+</body>
+</html>

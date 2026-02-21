@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="N5K2">
+    <meta name="theme-color" content="#667eea">
+    <meta name="description" content="Hệ thống quản lý học viên Tiếng Nhật N5K2">
+    
+    <title>Dashboard Quản Lý Lớp N5K2</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Icons -->
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="pwa-style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <h1>🇯🇵 Dashboard Quản Lý Lớp N5K2</h1>
+            <p>Hệ thống quản lý học viên Tiếng Nhật</p>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="navigation">
+        <div class="container">
+            <a href="index.html" class="nav-link active">
+                <span>👥</span> Học viên
+            </a>
+            <a href="attendance.html" class="nav-link">
+                <span>✅</span> Điểm danh
+            </a>
+            <a href="grades.html" class="nav-link">
+                <span>�</span> Bảng điểm
+            </a>
+            <a href="report.html" class="nav-link">
+                <span>📊</span> Chuyên cần
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Thống kê -->
+        <section class="stats-section">
+            <div class="stat-card">
+                <div class="stat-icon">👥</div>
+                <div class="stat-info">
+                    <h3>Tổng số học viên</h3>
+                    <p class="stat-number" id="totalStudents">0</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Form thêm học viên -->
+        <section class="form-section">
+            <div class="card">
+                <h2>➕ Thêm học viên mới</h2>
+                <form id="studentForm">
+                    <div class="form-group">
+                        <label for="studentName">Họ và tên *</label>
+                        <input 
+                            type="text" 
+                            id="studentName" 
+                            placeholder="Nhập họ tên học viên"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="studentZalo">Zalo *</label>
+                        <input 
+                            type="text" 
+                            id="studentZalo" 
+                            placeholder="Nhập số Zalo"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="studentGmail">Gmail *</label>
+                        <input 
+                            type="email" 
+                            id="studentGmail" 
+                            placeholder="Nhập địa chỉ Gmail"
+                            required
+                        >
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <span>✓</span> Thêm học viên
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Danh sách học viên -->
+        <section class="table-section">
+            <div class="card">
+                <div class="card-header">
+                    <h2>📋 Danh sách học viên</h2>
+                    <button class="btn btn-secondary btn-small" id="clearAllBtn">
+                        🗑️ Xóa tất cả
+                    </button>
+                </div>
+                
+                <div class="table-container">
+                    <table id="studentsTable">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Họ và tên</th>
+                                <th>Zalo</th>
+                                <th>Gmail</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentsTableBody">
+                            <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+                        </tbody>
+                    </table>
+                    
+                    <!-- Thông báo khi chưa có học viên -->
+                    <div id="emptyState" class="empty-state">
+                        <div class="empty-icon">📚</div>
+                        <p>Chưa có học viên nào</p>
+                        <small>Hãy thêm học viên đầu tiên của bạn!</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>© 2024 Lớp Tiếng Nhật N5K2 - Dashboard Quản Lý Học Viên</p>
+        </div>
+    </footer>
+
+    <!-- Modal xác nhận xóa -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <h3>⚠️ Xác nhận xóa</h3>
+            <p id="confirmMessage">Bạn có chắc chắn muốn xóa học viên này?</p>
+            <div class="modal-actions">
+                <button class="btn btn-danger" id="confirmDeleteBtn">Xóa</button>
+                <button class="btn btn-secondary" id="cancelDeleteBtn">Hủy</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast notification -->
+    <div id="toast" class="toast"></div>
+
+    <script src="app.js"></script>
+    <script src="pwa-init.js"></script>
+</body>
+</html>

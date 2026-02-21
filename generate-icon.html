@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tạo Icon App N5K2</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        .icon-preview {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 30px 0;
+        }
+        canvas {
+            border: 2px solid #ddd;
+            border-radius: 10px;
+        }
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        .btn:hover {
+            background: #5568d3;
+        }
+        .instructions {
+            margin-top: 30px;
+            text-align: left;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .instructions h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        .instructions ol {
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Tạo Icon App N5K2</h1>
+        <p>Click nút bên dưới để tải icon cho app</p>
+        
+        <div class="icon-preview">
+            <div>
+                <p><strong>192x192</strong></p>
+                <canvas id="icon192" width="192" height="192"></canvas>
+                <br>
+                <button class="btn" onclick="downloadIcon(192)">📥 Tải 192x192</button>
+            </div>
+            <div>
+                <p><strong>512x512</strong></p>
+                <canvas id="icon512" width="512" height="512"></canvas>
+                <br>
+                <button class="btn" onclick="downloadIcon(512)">📥 Tải 512x512</button>
+            </div>
+        </div>
+
+        <div class="instructions">
+            <h3>📋 Hướng dẫn:</h3>
+            <ol>
+                <li>Click nút "Tải 192x192" để tải icon nhỏ</li>
+                <li>Click nút "Tải 512x512" để tải icon lớn</li>
+                <li>Đổi tên file thành <code>icon-192.png</code> và <code>icon-512.png</code></li>
+                <li>Copy 2 file vào thư mục gốc của website</li>
+                <li>Xong! App sẽ có icon đẹp</li>
+            </ol>
+            <p><strong>Lưu ý:</strong> Nếu muốn icon khác, bạn có thể dùng tool online như:</p>
+            <ul>
+                <li><a href="https://www.pwabuilder.com/imageGenerator" target="_blank">PWA Builder Image Generator</a></li>
+                <li><a href="https://realfavicongenerator.net/" target="_blank">Real Favicon Generator</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Vẽ icon 192x192
+        function drawIcon(canvas, size) {
+            const ctx = canvas.getContext('2d');
+            
+            // Background gradient
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, '#667eea');
+            gradient.addColorStop(1, '#764ba2');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, size, size);
+            
+            // Japanese flag circle
+            const flagY = size * 0.35;
+            const flagRadius = size * 0.15;
+            
+            // White circle
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.arc(size/2, flagY, flagRadius, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Red circle
+            ctx.fillStyle = '#dc143c';
+            ctx.beginPath();
+            ctx.arc(size/2, flagY, flagRadius * 0.75, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Book
+            const bookWidth = size * 0.3;
+            const bookHeight = size * 0.35;
+            const bookX = (size - bookWidth) / 2;
+            const bookY = size * 0.55;
+            
+            // Book shadow
+            ctx.fillStyle = 'rgba(0,0,0,0.2)';
+            ctx.fillRect(bookX + 5, bookY + 5, bookWidth, bookHeight);
+            
+            // Book background
+            ctx.fillStyle = 'white';
+            ctx.fillRect(bookX, bookY, bookWidth, bookHeight);
+            
+            // Book pages
+            ctx.fillStyle = '#f0f0f0';
+            ctx.fillRect(bookX + size*0.02, bookY + size*0.02, bookWidth - size*0.04, bookHeight - size*0.04);
+            
+            // Lines on book
+            ctx.strokeStyle = '#667eea';
+            ctx.lineWidth = size * 0.008;
+            ctx.lineCap = 'round';
+            
+            const lineX1 = bookX + size * 0.04;
+            const lineX2 = bookX + bookWidth - size * 0.04;
+            
+            for (let i = 0; i < 3; i++) {
+                const lineY = bookY + size * 0.08 + (i * size * 0.06);
+                ctx.beginPath();
+                ctx.moveTo(lineX1, lineY);
+                ctx.lineTo(lineX2 - (i === 2 ? size * 0.05 : 0), lineY);
+                ctx.stroke();
+            }
+            
+            // N5 text
+            ctx.fillStyle = '#667eea';
+            ctx.font = `bold ${size * 0.12}px Arial, sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('N5', size/2, bookY + bookHeight - size * 0.08);
+        }
+
+        // Draw both icons
+        drawIcon(document.getElementById('icon192'), 192);
+        drawIcon(document.getElementById('icon512'), 512);
+
+        // Download function
+        function downloadIcon(size) {
+            const canvas = document.getElementById('icon' + size);
+            const link = document.createElement('a');
+            link.download = 'icon-' + size + '.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+    </script>
+</body>
+</html>

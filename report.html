@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#667eea">
+    
+    <title>Báo cáo Chuyên cần - Lớp N5K2</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="report.css">
+    <link rel="stylesheet" href="pwa-style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <h1>🇯🇵 Dashboard Quản Lý Lớp N5K2</h1>
+            <p>Hệ thống quản lý học viên Tiếng Nhật</p>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="navigation">
+        <div class="container">
+            <a href="index.html" class="nav-link">
+                <span>👥</span> Học viên
+            </a>
+            <a href="attendance.html" class="nav-link">
+                <span>✅</span> Điểm danh
+            </a>
+            <a href="grades.html" class="nav-link">
+                <span>📝</span> Bảng điểm
+            </a>
+            <a href="report.html" class="nav-link active">
+                <span>📊</span> Chuyên cần
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Thống kê tổng quan -->
+        <section class="stats-section">
+            <div class="stat-card">
+                <div class="stat-icon">👥</div>
+                <div class="stat-info">
+                    <h3>Tổng học viên</h3>
+                    <p class="stat-number" id="totalStudents">0</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">📅</div>
+                <div class="stat-info">
+                    <h3>Tổng buổi học</h3>
+                    <p class="stat-number" id="totalSessions">0</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">✅</div>
+                <div class="stat-info">
+                    <h3>Điểm TB lớp</h3>
+                    <p class="stat-number" id="avgAttendance">0</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">⚠️</div>
+                <div class="stat-info">
+                    <h3>Học sinh yếu</h3>
+                    <p class="stat-number" id="warningCount">0</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bộ lọc -->
+        <section class="filter-section">
+            <div class="card">
+                <h2>🔍 Bộ lọc</h2>
+                
+                <!-- Công thức tính điểm -->
+                <div class="formula-info">
+                    <strong>📐 Công thức tính điểm tổng:</strong>
+                    <div class="formula">
+                        Điểm tổng = (Chuyên cần × 30%) + (Điểm TB × 70%)
+                    </div>
+                    <small style="color: #666;">
+                        * Chuyên cần được quy đổi sang thang điểm 10<br>
+                        * Điểm TB là trung bình có hệ số của các bài kiểm tra
+                    </small>
+                </div>
+
+                <div class="filter-group">
+                    <div class="filter-item">
+                        <label>Trạng thái</label>
+                        <select id="statusFilter">
+                            <option value="all">Tất cả</option>
+                            <option value="excellent">Xuất sắc (≥8)</option>
+                            <option value="good">Khá (≥6.5)</option>
+                            <option value="average">Trung bình (≥5)</option>
+                            <option value="warning">Yếu (<5)</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label>Sắp xếp</label>
+                        <select id="sortFilter">
+                            <option value="name-asc">Tên A-Z</option>
+                            <option value="name-desc">Tên Z-A</option>
+                            <option value="attendance-desc">Điểm tổng cao → thấp</option>
+                            <option value="attendance-asc">Điểm tổng thấp → cao</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <button class="btn btn-primary" id="applyFilterBtn">Áp dụng</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bảng chi tiết chuyên cần -->
+        <section class="table-section">
+            <div class="card">
+                <div class="card-header">
+                    <h2>📊 Báo cáo chi tiết chuyên cần</h2>
+                    <div class="header-actions">
+                        <button class="btn btn-secondary btn-small" id="exportBtn">
+                            📥 Xuất Excel
+                        </button>
+                        <button class="btn btn-secondary btn-small" id="printBtn">
+                            🖨️ In báo cáo
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table id="reportTable">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Họ và tên</th>
+                                <th>Tổng buổi</th>
+                                <th>Có mặt</th>
+                                <th>Vắng</th>
+                                <th>Trễ</th>
+                                <th>% Chuyên cần</th>
+                                <th>Điểm TB</th>
+                                <th>Điểm tổng</th>
+                                <th>Xếp loại</th>
+                                <th>Ghi chú</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reportTableBody">
+                            <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+                        </tbody>
+                    </table>
+                    
+                    <div id="reportEmptyState" class="empty-state show">
+                        <div class="empty-icon">📊</div>
+                        <p>Chưa có dữ liệu báo cáo</p>
+                        <small>Hãy thêm học viên và điểm danh để xem báo cáo!</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Biểu đồ phân bố -->
+        <section class="chart-section">
+            <div class="card">
+                <h2>📈 Phân bố chuyên cần</h2>
+                <div class="chart-container">
+                    <div class="chart-bar-group">
+                        <div class="chart-bar-item">
+                            <div class="chart-bar excellent" id="barExcellent" style="height: 0%"></div>
+                            <div class="chart-label">
+                                <div class="chart-value" id="countExcellent">0</div>
+                                <div class="chart-text">Xuất sắc</div>
+                            </div>
+                        </div>
+                        <div class="chart-bar-item">
+                            <div class="chart-bar good" id="barGood" style="height: 0%"></div>
+                            <div class="chart-label">
+                                <div class="chart-value" id="countGood">0</div>
+                                <div class="chart-text">Khá</div>
+                            </div>
+                        </div>
+                        <div class="chart-bar-item">
+                            <div class="chart-bar average" id="barAverage" style="height: 0%"></div>
+                            <div class="chart-label">
+                                <div class="chart-value" id="countAverage">0</div>
+                                <div class="chart-text">Trung bình</div>
+                            </div>
+                        </div>
+                        <div class="chart-bar-item">
+                            <div class="chart-bar warning" id="barWarning" style="height: 0%"></div>
+                            <div class="chart-label">
+                                <div class="chart-value" id="countWarning">0</div>
+                                <div class="chart-text">Cảnh báo</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Danh sách cảnh báo -->
+        <section class="warning-section">
+            <div class="card">
+                <h2>⚠️ Danh sách học viên yếu (Điểm tổng < 5)</h2>
+                <div id="warningList" class="warning-list">
+                    <!-- Sẽ được render bằng JavaScript -->
+                </div>
+                <div id="warningEmptyState" class="empty-state show">
+                    <div class="empty-icon">✅</div>
+                    <p>Không có học viên nào yếu</p>
+                    <small>Tất cả học viên đều có điểm tổng ≥ 5</small>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>© 2024 Lớp Tiếng Nhật N5K2 - Dashboard Quản Lý Học Viên</p>
+        </div>
+    </footer>
+
+    <!-- Toast notification -->
+    <div id="toast" class="toast"></div>
+
+    <script src="report.js"></script>
+    <script src="pwa-init.js"></script>
+</body>
+</html>
